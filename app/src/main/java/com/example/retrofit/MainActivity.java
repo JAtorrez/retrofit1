@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn;
     private CheckBox c1, c2 , c3, c4;
     private String content = "";
-    private ArrayList<String> lista = new ArrayList();
+    private ArrayList<Result> lista = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     content = "";
                     content += i + result.getName()+", ";
                    // content += "Rating: "+ result.getRating()+"\n";
-                    lista.add(result.getName());
+                   // lista.add(result.getName());
 
                     txtsalida.append(content);
                     i++;
