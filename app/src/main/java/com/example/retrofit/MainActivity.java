@@ -1,5 +1,6 @@
 package com.example.retrofit;
 
+import android.graphics.text.LineBreaker;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import com.example.retrofit.Interfaz.Jsonapi;
 import com.example.retrofit.modelo.Respuesta;
 import com.example.retrofit.modelo.Result;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,9 +25,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView txtsalida;
+    private Respuesta respuesta;
     private Button btn;
     private CheckBox c1, c2 , c3, c4;
     private String content = "";
+    private ArrayList<String> lista = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +61,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     txtsalida.setText("Codigo: "+response.code());
                     return;
                 }
-                Respuesta respuesta = response.body();
+                respuesta = response.body();
                 int i = 1;
 
-                for(Result result: respuesta.getResults() ){
+                for(Result result: respuesta.getResults()){
                     content = "";
                     content += i + result.getName()+", ";
-                    content += "Rating: "+ result.getRating()+"\n";
+                   // content += "Rating: "+ result.getRating()+"\n";
+                    lista.add(result.getName());
 
                     txtsalida.append(content);
                     i++;
                }
+
                 btn.setEnabled(true);
+
+
+
 
             }
 
@@ -91,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (c1.isChecked()){
                     String tipo = "museum";
                     getdata();
+                    txtsalida.append(lista.get(1));
                 }
                 if (c2.isChecked()){
                     String tipo = "park";
@@ -114,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     content = "";
 
                 }
+
 
 
                 break;

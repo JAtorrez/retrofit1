@@ -17,6 +17,10 @@ public class Respuesta {
         this.results = results;
     }
 
+    public Respuesta() {
+
+    }
+
 
     public List<Result> getResults() {
         return results;
