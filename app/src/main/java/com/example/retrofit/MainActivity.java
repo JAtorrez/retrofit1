@@ -22,7 +22,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
+// probando el git
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView txtsalida;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String content = "";
     private int ban=0;
     private List<Result> lista = new ArrayList<>();
-    //
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
