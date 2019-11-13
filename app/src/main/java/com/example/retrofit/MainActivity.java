@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String content = "";
     private int ban=0;
     private List<Result> lista = new ArrayList<>();
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
