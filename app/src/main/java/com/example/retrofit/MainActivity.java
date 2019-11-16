@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         txtsalida.append(content);*/
                     }
                     ban = 1;
-                    next = 1;
+                    //next = 1;
 
 
                 }
@@ -97,24 +97,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         String lugar="";
         if(ban == 0){
+            lista.clear();
             btn.setEnabled(false);
-            if (c1.isChecked()  && next == 1 ){
-                next = 0;
+            if (c1.isChecked()  ){
                 lugar = "museum";
                 getData(lugar);
             }
-            if (c2.isChecked() && next == 1){
-                next = 0;
+            if (c2.isChecked() ){
                 lugar = "restaurant";
                 getData(lugar);
             }
-            if (c3.isChecked() && next == 1){
-                next = 0;
+            if (c3.isChecked()){
                 lugar = "park";
                 getData(lugar);
             }
-            if (c4.isChecked() && next == 1){
-                next = 0;
+            if (c4.isChecked() ){
                 lugar = "school";
                 getData(lugar);
             }else{
@@ -125,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              //txtsalida.append(lista.get(19).getName());
             imprimir();
             ban = 0;
-            //lista.clear();
-
         }
 
 
