@@ -50,4 +50,7 @@ public class Result {
         this.rating = rating;
     }
 
+
+
+
 }

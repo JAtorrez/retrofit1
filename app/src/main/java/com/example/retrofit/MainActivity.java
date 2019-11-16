@@ -28,9 +28,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtsalida;
     private Respuesta respuesta;
     private Button btn;
-    private String content = "";
-    private int ban=0;
+    private String content = "", key ="AIzaSyATEjX-mkhIyxKki7QZpjLX7UUMiQZUWWg" , local = "20.127422, -98.731714";
+    private int ban=0, next = 1, radio = 1500;
     private List<Result> lista = new ArrayList<>();
+    private CheckBox c1,c2,c3,c4;
+
 
 
     @Override
@@ -40,16 +42,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtsalida = findViewById(R.id.salida);
         btn = findViewById(R.id.btnpeticion);
         btn.setOnClickListener(this);
-    }
+        c1 = findViewById(R.id.cbmuseum);
+        c2 = findViewById(R.id.cbrest);
+        c3 = findViewById(R.id.cbpark);
+        c4 = findViewById(R.id.cbschool);
 
-    public void getData(){
+}
+
+    public void getData(String tipo){
         Retrofit retrofit = new  Retrofit.Builder().baseUrl("https://maps.googleapis.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         Jsonapi jsonapi = retrofit.create(Jsonapi.class);
 
-        Call<Respuesta> call = jsonapi.getPost();
+        Call<Respuesta> call = jsonapi.getPost(local,radio, tipo, key);
         call.enqueue(new Callback<Respuesta>() {
 
             @Override
@@ -59,13 +66,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     txtsalida.setText("Codigo: "+response.code());
                     btn.setEnabled(true);
 
-                    return;
                 } else{
                     respuesta = response.body();
                     for(Result result: respuesta.getResults() ){
                         lista.add(result);
+                        /*String content = "";
+                        content += "Name: "+ result.getName()+"\n";
+                        content += "Rating: "+ result.getRating()+"\n";
+
+                        txtsalida.append(content);*/
                     }
                     ban = 1;
+                    next = 1;
 
 
                 }
@@ -83,15 +95,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        String lugar="";
         if(ban == 0){
             btn.setEnabled(false);
-            getData();
+            if (c1.isChecked()  && next == 1 ){
+                next = 0;
+                lugar = "museum";
+                getData(lugar);
+            }
+            if (c2.isChecked() && next == 1){
+                next = 0;
+                lugar = "restaurant";
+                getData(lugar);
+            }
+            if (c3.isChecked() && next == 1){
+                next = 0;
+                lugar = "park";
+                getData(lugar);
+            }
+            if (c4.isChecked() && next == 1){
+                next = 0;
+                lugar = "school";
+                getData(lugar);
+            }else{
+                txtsalida.setText("Selecciona un lugar.");
+                btn.setEnabled(true);
+            }
         }else{
-            txtsalida.append(lista.get(19).getName());
+             //txtsalida.append(lista.get(19).getName());
+            imprimir();
+            ban = 0;
+            //lista.clear();
 
         }
 
 
+    }
+
+
+    public void imprimir (){
+        String resultados = "";
+        for (int i = 0; i < lista.size(); i++)
+            if(i + 1 < lista.size())
+                resultados += lista.get(i).getName() + " | \n ";
+            else
+                resultados += lista.get(i).getName();
+
+        txtsalida.setText(resultados);
     }
 
 }

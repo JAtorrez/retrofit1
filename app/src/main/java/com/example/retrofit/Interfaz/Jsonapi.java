@@ -4,14 +4,27 @@ import com.example.retrofit.modelo.Respuesta;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface Jsonapi {
 
 
+    //restaurant
 
-    @GET("maps/api/place/nearbysearch/json?location=20.127422, -98.731714&radius=1500&type=restaurant&key=AIzaSyATEjX-mkhIyxKki7QZpjLX7UUMiQZUWWg")
+    //String lugar = "";
 
-    Call<Respuesta> getPost();
+    @GET("maps/api/place/nearbysearch/json?")
+
+    Call<Respuesta> getPost(
+            @Query("location") String local,
+            @Query("radius") int radio,
+            @Query("type") String tipo,
+            @Query("key") String key);
+
+
+
+
+
 
 
 }
