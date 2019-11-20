@@ -2,7 +2,7 @@ package com.example.retrofit.modelo;
 
 public class Result {
 
-    //private String id;
+    private String id;
     private String name;
     private double rating;
 
@@ -16,23 +16,23 @@ public class Result {
      *
      * @param rating
      * @param name
-     ////* @param id
+     * @param id
      */
     public Result (String id, String name, double rating) {
         super();
-        //this.id = id;
+        this.id = id;
         this.name = name;
         this.rating = rating;
 
     }
 
-   /* public String getId() {
+   public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }*/
+    }
 
     public String getName() {
         return name;

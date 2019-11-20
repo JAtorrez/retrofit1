@@ -1,6 +1,7 @@
 package com.example.retrofit;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +15,9 @@ import com.example.retrofit.modelo.Result;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,7 +26,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-// probando el git
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView txtsalida;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         txtsalida.append(content);*/
                     }
+
                     ban = 1;
                     //next = 1;
 
@@ -114,12 +118,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (c4.isChecked() ){
                 lugar = "school";
                 getData(lugar);
-            }else{
+            }else if (!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked()){
                 txtsalida.setText("Selecciona un lugar.");
                 btn.setEnabled(true);
             }
         }else{
-             //txtsalida.append(lista.get(19).getName());
             imprimir();
             ban = 0;
         }
@@ -129,14 +132,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void imprimir (){
+
+        for (int i=0; i< lista.size(); i++){
+            Log.d("Lugar :" ,lista.get(i).getName() +" :"+ lista.get(i).getRating() );
+        }
+
+
+
         String resultados = "";
+        ordenar();
         for (int i = 0; i < lista.size(); i++)
             if(i + 1 < lista.size())
-                resultados += lista.get(i).getName() + " | \n ";
+                resultados += lista.get(i).getName() +  lista.get(i).getRating()+" | \n ";
             else
-                resultados += lista.get(i).getName();
+                resultados += lista.get(i).getName() + lista.get(i).getRating();
 
         txtsalida.setText(resultados);
     }
 
+    public void ordenar(){
+
+        Collections.sort(lista, new Comparator<Result>() {
+            @Override
+            public int compare(Result o1, Result o2) {
+                return new Double(o2.getRating()).compareTo(new Double(o1.getRating()));
+            }
+        });
+
+    }
 }
