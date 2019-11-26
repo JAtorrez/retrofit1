@@ -1,11 +1,13 @@
 package com.example.retrofit;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,10 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtsalida;
 
     private Button btn;
-    private String content = "", key ="AIzaSyATEjX-mkhIyxKki7QZpjLX7UUMiQZUWWg" , local = "20.127422, -98.731714";
+    private String content = "", key ="AIzaSyATEjX-mkhIyxKki7QZpjLX7UUMiQZUWWg" , local = "20.127422, -98.731714", next = "";
     private int ban=0, radio = 1500, id = 1;
     private List<Result> lista = new ArrayList<>();
     private CheckBox c1,c2,c3,c4;
+    Peticion service = ServiceGenerator.createService(Peticion.class);
 
 
 
@@ -50,28 +53,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 }
 
 
-    public void getData( String tipo, String token){
+    public String getData( String tipo, String token){
         String nextp = token;
-       /* Retrofit retrofit = new Coneccion().getcoteccion();
-        Peticion peticion = retrofit.create(Peticion.class);*/
-
-        Peticion service = ServiceGenerator.createService(Peticion.class);
-
         Call<Respuesta> callSync = service.getPost(local,radio, tipo, key, nextp);
-
         Respuesta respuesta = null;
-        try{
+        try {
             respuesta =  callSync.execute().body();
             nextp = respuesta.getNextPageToken();
             for(Result result: respuesta.getResults() ){
                 lista.add(result);
                 Log.d("Lugar :" ,result.getName() + result.getRating());
             }
-            Log.d("token :" ,nextp);
-
+            //Log.d("token :" ," "+ next);
+            return nextp;
         } catch (IOException e) {
             e.printStackTrace();
+            return nextp;
         }
+
 
       /*call.enqueue(new Callback<Respuesta>() {
 
@@ -116,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         String lugar = "";
-        String next = "";
         id = 1;
         if(ban == 0){
             lista.clear();
@@ -124,20 +122,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn.setEnabled(false);
             if (c1.isChecked()  ){
                 lugar = "museum";
-
-                getData(lugar, next);
+                Tarea tarea = new Tarea(lugar,next);
+                tarea.execute();
             }
             if (c2.isChecked() ){
                 lugar = "restaurant";
-                getData(lugar, next);
+                Tarea tarea = new Tarea(lugar,next);
+                Log.d("token " ,"hola"+ next);
+                tarea.execute();
             }
             if (c3.isChecked()){
                 lugar = "park";
-                getData(lugar, next);
+                Tarea tarea = new Tarea(lugar,next);
+                Log.d("token " ,"hola"+ next);
+                tarea.execute();
             }
             if (c4.isChecked() ){
                 lugar = "school";
-                getData(lugar, next);
+                Tarea tarea = new Tarea(lugar,next);
+                Log.d("token " ,"hola"+ next);
+                tarea.execute();
             }else if (!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked()){
                 txtsalida.setText("Selecciona un lugar.");
                 btn.setEnabled(true);
@@ -186,4 +190,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+
+    private class Tarea extends AsyncTask<Void, Integer, Boolean> {
+
+        private String tipo;
+        private String nextp;
+
+        public Tarea(String tipo, String nextp) {
+            this.tipo = tipo;
+            this.nextp = nextp;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            nextp = getData(tipo, nextp);
+            Log.d("token1 " ,""+ nextp);
+
+            while (nextp!=null){
+                Log.d("token2 " ,""+ nextp);
+                nextp = getData(tipo, nextp);
+                Log.d("fin " ,"acabo");
+            }
+
+            //Log.d("token " ,"hola"+ next);
+            
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+
+
+        @Override
+        protected void onPostExecute(Boolean resultado) {
+            //super.onPostExecute(aVoid);
+            if(resultado){
+                Toast.makeText(getBaseContext(), "peticion finalizada en AsyncTask", Toast.LENGTH_SHORT).show();
+                ban = 1;
+                btn.setEnabled(true);
+
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+            Toast.makeText(getBaseContext(), "Tarea Larga Ha sido cancelada", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
+
+
 }
