@@ -10,21 +10,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.retrofit.Interfaz.Peticion;
-import com.example.retrofit.modelo.Coneccion;
 import com.example.retrofit.modelo.Respuesta;
 import com.example.retrofit.modelo.Result;
+import com.example.retrofit.modelo.ServiceGenerator;
 
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -54,13 +50,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 }
 
 
-    public void getData(final String tipo, String token){
-        final String[] nextp = {token};
-        Retrofit retrofit = new Coneccion().getcoteccion();
-        final Peticion peticion = retrofit.create(Peticion.class);
+    public void getData( String tipo, String token){
+        String nextp = token;
+       /* Retrofit retrofit = new Coneccion().getcoteccion();
+        Peticion peticion = retrofit.create(Peticion.class);*/
 
-        Call<Respuesta> call = peticion.getPost(local,radio, tipo, key, nextp[0]);
-        call.enqueue(new Callback<Respuesta>() {
+        Peticion service = ServiceGenerator.createService(Peticion.class);
+
+        Call<Respuesta> callSync = service.getPost(local,radio, tipo, key, nextp);
+
+        Respuesta respuesta = null;
+        try{
+            respuesta =  callSync.execute().body();
+            nextp = respuesta.getNextPageToken();
+            for(Result result: respuesta.getResults() ){
+                lista.add(result);
+                Log.d("Lugar :" ,result.getName() + result.getRating());
+            }
+            Log.d("token :" ,nextp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+      /*call.enqueue(new Callback<Respuesta>() {
 
             @Override
             public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
@@ -95,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Call<Respuesta> call, Throwable t) {
                 txtsalida.setText(t.getMessage());
             }
-        });
+        });*/
 
     }
 
