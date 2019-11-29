@@ -1,42 +1,50 @@
 package com.example.retrofit.modelo.atributos;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Location {
 
-
-    private double lat;
-    private double lng;
+    @SerializedName("lat")
+    @Expose
+    private Double lat;
+    @SerializedName("lng")
+    @Expose
+    private Double lng;
 
     /**
-     * No args constructor for use in serialization
      *
+     * @return
+     * The lat
      */
-    public Location() {
+    public Double getLat() {
+        return lat;
+    }
+
+    /**
+     *
+     * @param lat
+     * The lat
+     */
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    /**
+     *
+     * @return
+     * The lng
+     */
+    public Double getLng() {
+        return lng;
     }
 
     /**
      *
      * @param lng
-     * @param lat
+     * The lng
      */
-    public Location(double lat, double lng) {
-        super();
-        this.lat = lat;
-        this.lng = lng;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 

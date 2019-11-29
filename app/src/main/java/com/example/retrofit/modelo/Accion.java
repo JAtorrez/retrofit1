@@ -3,7 +3,6 @@ package com.example.retrofit.modelo;
 import android.util.Log;
 
 import com.example.retrofit.Interfaz.Peticion;
-import com.example.retrofit.modelo.atributos.Nextpage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,34 +18,49 @@ public class Accion {
     private String keyapi="AIzaSyATEjX-mkhIyxKki7QZpjLX7UUMiQZUWWg";
     private int   id=1;
 
-    public void getData(String local, int radio, String type, String next){
+    public void getData(String local, int radio, String type, String next) {
 
         Respuesta respuesta = null;
-        Nextpage nextpagetoken = null;
-        Call<Respuesta> callSync = service.getPost2(local,radio, type, keyapi, next);
-        Call<Nextpage> callnextpage = service.getnext2(local,radio, type, keyapi, next);
-        Log.d("token1", next);
+      //  Nextpage nextpagetoken = null;
+        Call<Respuesta> callSync = service.getPost2(local, radio, type, keyapi, next);
+        //Call<Nextpage> callnextpage = service.getnext2(local, radio, type, keyapi, next);
         try {
-            respuesta =  callSync.execute().body();
-            nextpagetoken = callnextpage.execute().body();
-            next = nextpagetoken.getNextPageToken();
-            Log.d("token2", ""+next);
-            for(Result result: respuesta.getResults() ) {
-                lista.add(result);
-                Log.d("lugar", ""+respuesta.getResults().get(1).getName());
-            }
+            respuesta = callSync.execute().body();
+           // nextpagetoken = callnextpage.execute().body();
+            next = respuesta.getNextPageToken();
+            for (Result result : respuesta.getResults()) {
+                if (result.getRating() != null) {
+                    lista.add(result);
+                    Log.d("lugar", "" + respuesta.getResults().get(1).getName());
+                }
 
-            if ( next != null){
-                Log.d("token3", ""+next);
-                getData(local, radio, type, next);
             }
+            if (next != null) {
+                Log.d("token3", "" + next);
+                respuesta = null;
 
+                Log.d("token1", next);
+                try {
+                    respuesta = callSync.clone().execute().body();
+                    //nextpagetoken = callnextpage.execute().body();
+                    next = respuesta.getNextPageToken();
+                    Log.d("token2", "" + next);
+                    for (Result result : respuesta.getResults()) {
+                        if (result.getRating() != null) {
+                            lista.add(result);
+                            Log.d("lugar", "" + respuesta.getResults().get(1).getName());
+                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 
 
     public String imprimir (){

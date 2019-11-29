@@ -1,66 +1,95 @@
 package com.example.retrofit.modelo.atributos;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Photo {
-    private int height;
-    private List<String> htmlAttributions = null;
+    @SerializedName("height")
+    @Expose
+    private Integer height;
+    @SerializedName("html_attributions")
+    @Expose
+    private List<String> htmlAttributions = new ArrayList<String>();
+    @SerializedName("photo_reference")
+    @Expose
     private String photoReference;
-    private int width;
+    @SerializedName("width")
+    @Expose
+    private Integer width;
 
     /**
-     * No args constructor for use in serialization
      *
+     * @return
+     * The height
      */
-    public Photo() {
+    public Integer getHeight() {
+        return height;
+    }
+
+    /**
+     *
+     * @param height
+     * The height
+     */
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    /**
+     *
+     * @return
+     * The htmlAttributions
+     */
+    public List<String> getHtmlAttributions() {
+        return htmlAttributions;
     }
 
     /**
      *
      * @param htmlAttributions
-     * @param photoReference
-     * @param width
-     * @param height
+     * The html_attributions
      */
-    public Photo(int height, List<String> htmlAttributions, String photoReference, int width) {
-        super();
-        this.height = height;
-        this.htmlAttributions = htmlAttributions;
-        this.photoReference = photoReference;
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public List<String> getHtmlAttributions() {
-        return htmlAttributions;
-    }
-
     public void setHtmlAttributions(List<String> htmlAttributions) {
         this.htmlAttributions = htmlAttributions;
     }
 
+    /**
+     *
+     * @return
+     * The photoReference
+     */
     public String getPhotoReference() {
         return photoReference;
     }
 
+    /**
+     *
+     * @param photoReference
+     * The photo_reference
+     */
     public void setPhotoReference(String photoReference) {
         this.photoReference = photoReference;
     }
 
-    public int getWidth() {
+    /**
+     *
+     * @return
+     * The width
+     */
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    /**
+     *
+     * @param width
+     * The width
+     */
+    public void setWidth(Integer width) {
         this.width = width;
     }
-
 
 }

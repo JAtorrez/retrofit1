@@ -1,31 +1,34 @@
 package com.example.retrofit.modelo.atributos;
 
-public class OpeningHours {
-    private boolean openNow;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class OpeningHours {
+    @SerializedName("open_now")
+    @Expose
+    private Boolean openNow;
     /**
-     * No args constructor for use in serialization
      *
+     * @return
+     * The openNow
      */
-    public OpeningHours() {
+    public Boolean getOpenNow() {
+        return openNow;
     }
 
     /**
      *
      * @param openNow
+     * The open_now
      */
-    public OpeningHours(boolean openNow) {
-        super();
+    public void setOpenNow(Boolean openNow) {
         this.openNow = openNow;
     }
 
-    public boolean isOpenNow() {
-        return openNow;
-    }
-
-    public void setOpenNow(boolean openNow) {
-        this.openNow = openNow;
-    }
-
+    /**
+     *
+     * @return
+     * The weekdayText
+     */
 
 }
