@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         id = 1;
         if(ban == 0){
             btn.setEnabled(false);
+            txtsalida.setText("");
             if (c1.isChecked()  ){
                 lugar = "museum";
                // getData(lugar, next);

@@ -41,10 +41,14 @@ public class Accion {
 
                 Log.d("token1", next);
                 try {
-                    respuesta = callSync.clone().execute().body();
+                    Call<Respuesta> call = service.getPost2(local, radio, type, keyapi, next);
+                    respuesta = call.execute().body();
                     //nextpagetoken = callnextpage.execute().body();
                     next = respuesta.getNextPageToken();
                     Log.d("token2", "" + next);
+                    while (respuesta.getResults().isEmpty()){
+                        respuesta = call.clone().execute().body();
+                    }
                     for (Result result : respuesta.getResults()) {
                         if (result.getRating() != null) {
                             lista.add(result);
