@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             txtsalida.setText("");
             if (c1.isChecked()  ){
                 lugar = "museum";
-               // getData(lugar, next);
                 Tarea tarea = new Tarea(lugar);
                 tarea.execute();
             }

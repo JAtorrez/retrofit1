@@ -21,13 +21,13 @@ public class Accion {
     public void getData(String local, int radio, String type, String next) {
 
         Respuesta respuesta = null;
-      //  Nextpage nextpagetoken = null;
         Call<Respuesta> callSync = service.getPost2(local, radio, type, keyapi, next);
-        //Call<Nextpage> callnextpage = service.getnext2(local, radio, type, keyapi, next);
         try {
             respuesta = callSync.execute().body();
-           // nextpagetoken = callnextpage.execute().body();
             next = respuesta.getNextPageToken();
+            while (respuesta.getResults().isEmpty()){
+                respuesta = callSync.clone().execute().body();
+            }
             for (Result result : respuesta.getResults()) {
                 if (result.getRating() != null) {
                     lista.add(result);
@@ -36,30 +36,7 @@ public class Accion {
 
             }
             if (next != null) {
-                Log.d("token3", "" + next);
-                respuesta = null;
-
-                Log.d("token1", next);
-                try {
-                    Call<Respuesta> call = service.getPost2(local, radio, type, keyapi, next);
-                    respuesta = call.execute().body();
-                    //nextpagetoken = callnextpage.execute().body();
-                    next = respuesta.getNextPageToken();
-                    Log.d("token2", "" + next);
-                    while (respuesta.getResults().isEmpty()){
-                        respuesta = call.clone().execute().body();
-                    }
-                    for (Result result : respuesta.getResults()) {
-                        if (result.getRating() != null) {
-                            lista.add(result);
-                            Log.d("lugar", "" + respuesta.getResults().get(1).getName());
-                        }
-
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                getData(local, radio, type, next);
             }
         } catch (IOException e) {
             e.printStackTrace();
