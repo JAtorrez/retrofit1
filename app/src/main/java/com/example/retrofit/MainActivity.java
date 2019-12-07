@@ -15,9 +15,8 @@ import com.example.retrofit.modelo.Accion;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView txtsalida;
-
     private Button btn;
-    private String content = "" , local = "20.127422, -98.731714", next = "";
+    private String content = "" , local = "20.127422, -98.731714";
     private int ban=0, radio = 1500, id = 1;
     private CheckBox c1,c2,c3,c4;
     Accion accion = new Accion();
@@ -39,59 +38,101 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 }
     @Override
     public void onClick(View v) {
-        String lugar = "";
-        id = 1;
-        if(ban == 0){
-            btn.setEnabled(false);
-            txtsalida.setText("");
-            if (c1.isChecked()  ){
-                lugar = "museum";
-                Tarea tarea = new Tarea(lugar);
+        btn.setEnabled(false);
+
+        switch(ban){
+            case 0:
+                btn.setText("Imprimir lugares");
+                txtsalida.setText("");
+                Tarea tarea = new Tarea();
                 tarea.execute();
-            }
-            if (c2.isChecked() ){
-                lugar = "restaurant";
-                Tarea tarea = new Tarea(lugar);
-                tarea.execute();
-            }
-            if (c3.isChecked()){
-                lugar = "park";
-                Tarea tarea = new Tarea(lugar);
-                tarea.execute();
-            }
-            if (c4.isChecked() ){
-                lugar = "school";
-                Tarea tarea = new Tarea(lugar);
-                tarea.execute();
-            }else if (!c1.isChecked() && !c2.isChecked() && !c3.isChecked() && !c4.isChecked()){
-                txtsalida.setText("Selecciona un lugar.");
+                break;
+            case 1:
+                txtsalida.setText(accion.imprimir());
+                btn.setText("Obtener tiempos");
+                ban = 2;
                 btn.setEnabled(true);
-            }
-        }else {
-            txtsalida.setText(accion.imprimir());
-            ban = 0;
+                break;
+            case 2:
+                btn.setText("Imprimir tiempos");
+                tarea = new Tarea();
+                tarea.execute();
+                break;
+            case 3:
+                txtsalida.setText(accion.imprimirRutas());
+                ban = 0;
+                btn.setText("Realizar peticion");
+                btn.setEnabled(true);
+                break;
+
         }
-
-
     }
 
     private class Tarea extends AsyncTask<Void, Integer, Boolean> {
 
-        private String tipo;
+        private boolean museum = false;
+        private boolean rest = false;
+        private boolean park = false;
+        private boolean school = false;
+        private String tipo="";
+        private int t =0;
 
-        public Tarea(String tipo) {
-            this.tipo = tipo;
+        public Tarea() {
+
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            if(ban == 0){
+                if (c1.isChecked()  ){
+                    museum = true;
+                }
+                if (c2.isChecked() ){
+                    rest = true;
+                }
+                if (c3.isChecked()){
+                    park = true;
+                }
+                if (c4.isChecked() ){
+                    tipo = "school";
+                    school = true;
+                }
+                t = 1;
+            } else {
+                t = 2;
+            }
+
+
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             String next = "";
-            accion.getData(local,radio, tipo, next);
+            if(t == 1){
+
+                if (museum == true){
+                    tipo = "museum";
+                    accion.getData(local,radio, tipo, next);
+                }
+                if (rest == true){
+                    tipo = "restaurant";
+                    accion.getData(local,radio, tipo, next);
+                }
+                if (park == true){
+                    tipo = "park";
+                    accion.getData(local,radio, tipo, next);
+                }
+                if (school == true){
+                    tipo = "school";
+                    accion.getData(local,radio, tipo, next);
+                }
+                ban = 1;
+            }
+            if(t == 2){
+                ban = 3;
+                accion.getduration();
+            }
             return true;
         }
 
@@ -106,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(Boolean resultado) {
             //super.onPostExecute(aVoid);
             if(resultado){
-                Toast.makeText(getBaseContext(), "peticion finalizada en AsyncTask", Toast.LENGTH_SHORT).show();
-                ban = 1;
+                Toast.makeText(getBaseContext(), "peticion finalizada", Toast.LENGTH_SHORT).show();
                 btn.setEnabled(true);
 
             }
@@ -122,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
 
 
 

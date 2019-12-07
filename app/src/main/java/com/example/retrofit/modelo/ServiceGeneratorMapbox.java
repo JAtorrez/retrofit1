@@ -4,9 +4,9 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ServiceGenerator
+public class ServiceGeneratorMapbox
 {
-    private static final String BASE_URL = "https://maps.googleapis.com/";
+    private static final String BASE_URL = "https://api.mapbox.com/";
 
     private static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(BASE_URL)
