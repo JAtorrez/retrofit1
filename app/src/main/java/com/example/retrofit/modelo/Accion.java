@@ -7,6 +7,8 @@ import com.example.retrofit.modelo.directions.DirectionsR;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,12 +51,12 @@ public class Accion {
 
     public void ordenar(){
 
-        /*Collections.sort(lista, new Comparator<Result>() {
+        Collections.sort(lista, new Comparator<Result>() {
             @Override
             public int compare(Result o1, Result o2) {
                 return new Double(o2.getRating()).compareTo(new Double(o1.getRating()));
             }
-        });*/
+        })
 
     }
 
@@ -87,6 +89,7 @@ public class Accion {
                  getDirection(i);
          }
     }
+
     public String coordenadas(int i){
 
         Double lng=0.0;
