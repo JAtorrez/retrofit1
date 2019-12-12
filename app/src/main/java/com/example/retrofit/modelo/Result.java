@@ -51,6 +51,26 @@ public class Result {
     @Expose
     private Integer priceLevel;
 
+    private  int tiempo;
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    private int tiempototal;
+
+    public int getTiempototal() {
+        return tiempototal;
+    }
+
+    public void setTiempototal(int tiempototal) {
+        this.tiempototal = tiempototal;
+    }
+
     /**
      *
      * @return

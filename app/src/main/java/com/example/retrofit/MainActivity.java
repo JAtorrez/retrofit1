@@ -15,8 +15,8 @@ import com.example.retrofit.modelo.Accion;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView txtsalida;
-    private Button btn;
-    private String content = "" , local = "20.127422, -98.731714";
+    private Button btn, btn2;
+    private String content = "" , local = "20.127422, -98.731714", local2 = "-98.731714,20.127422";
     private int ban=0, radio = 1500, id = 1;
     private CheckBox c1,c2,c3,c4;
     Accion accion = new Accion();
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tarea.execute();
                 break;
             case 3:
-                txtsalida.setText(accion.imprimirRutas());
+                txtsalida.setText(accion.itinerario());
                 ban = 0;
                 btn.setText("Realizar peticion");
                 btn.setEnabled(true);
@@ -113,25 +113,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (museum == true){
                     tipo = "museum";
+
                     accion.getData(local,radio, tipo, next);
                 }
                 if (rest == true){
                     tipo = "restaurant";
+
                     accion.getData(local,radio, tipo, next);
                 }
                 if (park == true){
                     tipo = "park";
+
                     accion.getData(local,radio, tipo, next);
                 }
                 if (school == true){
                     tipo = "school";
+
                     accion.getData(local,radio, tipo, next);
                 }
                 ban = 1;
             }
             if(t == 2){
                 ban = 3;
-                accion.getduration();
+                accion.getduration(local2);
             }
             return true;
         }
